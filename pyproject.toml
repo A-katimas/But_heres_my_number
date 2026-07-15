@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "call-me-maybe"
+version = "0.1.0"
+description = "Hey, I just met you, and this is crazy"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+	"flake8>=7.3.0",
+	"mypy>=1.20.0",
+    "pydantic",
+    "llm-sdk",
+    "torch==2.5.1+cpu",
+    "numpy",
+    "regex",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+llm-sdk = { path = "./llm_sdk" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+# ─────────────────────────────────────────────
+#  MYPY — vérification de types statique
+# ─────────────────────────────────────────────
+[tool.mypy]
+exclude = ["llm_sdk/"]
+python_version = "3.10"
+ignore_missing_imports = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_return_any = true
+show_error_codes = true
+
+[tool.black]
+line-length = 79
