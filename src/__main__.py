@@ -1,11 +1,12 @@
 from llm_sdk import Small_LLM_Model
-import json
+from parthing import Parseurjson
+
 
 def simple_prompt(prompt: str, max_new_tokens: int) -> None:
-    print("Hey, I just met you, and this is crazy")
 
     # 1. Charger le modèle (télécharge Qwen3-0.6B au premier lancement)
     model = Small_LLM_Model()
+    print("Hey, I just met you, and this is crazy")
 
     # 2. Encoder un prompt en une liste de token IDs
     input_ids = model.encode(prompt)[
@@ -37,13 +38,10 @@ def simple_prompt(prompt: str, max_new_tokens: int) -> None:
 
 
 def main() -> None:
-    readjson("data/input/function_calling_tests.json")
-    #simple_prompt("What is the sum of 2 and 5? Answer:", 22)
+    pars = Parseurjson()
+    print(pars.function_call[1]["prompt"])
+    simple_prompt(pars.function_call[1]["prompt"], 22)
 
-def readjson(folders : str) -> None:
-    with open(folders, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    print(data)
 
 if __name__ == "__main__":
     main()
