@@ -67,5 +67,20 @@
     "returns": {
       "type": "string"
     }
+  },
+  {
+    "name" : "fn_test",
+    "description" : "This is a test function for testing purposes.",
+    "parameters" : {
+      "param1" : {
+        "type" : "string"
+      },
+      "param2" : {
+        "type" : "number"
+      }
+    },
+    "returns" : {
+      "type" : "string"
+    }
   }
 ]

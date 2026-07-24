@@ -39,8 +39,9 @@ def simple_prompt(prompt: str, max_new_tokens: int) -> None:
 
 def main() -> None:
     pars = Parseurjson()
-    print(pars.function_call[1]["prompt"])
-    simple_prompt(pars.function_call[1]["prompt"], 22)
+    pars.print_function_call()
+    pars.print_function_define()
+    simple_prompt(pars.function_call.root[0].prompt, 22)
 
 
 if __name__ == "__main__":
