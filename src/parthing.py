@@ -3,6 +3,7 @@ import sys
 from typing import Any
 from pydantic import BaseModel, RootModel, ValidationError
 from use_terminal.color import color
+
 # ---------------------------------------------------------------------------
 # Modèles pour functions_definition.json
 # ---------------------------------------------------------------------------
@@ -46,7 +47,7 @@ class Parseurjson:
             source=function_define,
         )
 
-    def readjson(self, folders: str) -> list[Any]:
+    def readjson(self, folders: str) -> Any:
         try:
             with open(folders, "r", encoding="utf-8") as f:
                 return json.load(f)
@@ -63,7 +64,14 @@ class Parseurjson:
         try:
             return model.model_validate(data)
         except ValidationError as e:
-            print(color(f"[ERREUR] Validation échouée pour le fichier : {source}", 255,100,100))
+            print(
+                color(
+                    f"[ERREUR] Validation échouée pour le fichier : {source}",
+                    255,
+                    100,
+                    100,
+                )
+            )
             print(e)
             sys.exit(1)
 
@@ -75,5 +83,6 @@ class Parseurjson:
         for i, function in enumerate(self.function_define.root):
             print(
                 f"Function {i}: {function.name} - {function.description} "
-                f"parameters: {function.parameters} -> returns: {function.returns.type}"
+                f"parameters: {function.parameters} ",
+                f"-> returns: {function.returns.type}",
             )

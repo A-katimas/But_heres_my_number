@@ -41,7 +41,7 @@ def main() -> None:
     pars = Parseurjson()
     pars.print_function_call()
     pars.print_function_define()
-    simple_prompt(pars.function_call.root[0].prompt, 22)
+    simple_prompt(pars.function_call.root[1].prompt, 22)
 
 
 if __name__ == "__main__":
