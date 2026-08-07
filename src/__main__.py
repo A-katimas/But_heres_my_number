@@ -29,9 +29,7 @@ def simple_prompt(prompt: str, max_new_tokens: int) -> None:
         input_ids.append(next_token_id)
 
         # d. On regarde ce que ça donne en texte à chaque étape (debug pédagogique)
-        print(
-            f"Step {step}: token_id={next_token_id} -> texte partiel = {model.decode(input_ids)!r}"
-        )
+        print(f"\ntexte partiel = {model.decode(input_ids)!r}")
 
     print("\n--- Résultat final ---")
     print(model.decode(input_ids))
@@ -41,7 +39,8 @@ def main() -> None:
     pars = Parseurjson()
     pars.print_function_call()
     pars.print_function_define()
-    simple_prompt(pars.function_call.root[1].prompt, 22)
+
+    simple_prompt(pars.build_prompt(pars.function_call.root[1].prompt), 50)
 
 
 if __name__ == "__main__":
