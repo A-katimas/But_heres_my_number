@@ -1,8 +1,9 @@
 from llm_sdk import Small_LLM_Model
 from parthing import Parseurjson
+from add_folder import Add_Folders
 
 
-def simple_prompt(prompt: str, max_new_tokens: int) -> None:
+def simple_prompt(prompt: str, max_new_tokens: int) -> str:
 
     # 1. Charger le modèle (télécharge Qwen3-0.6B au premier lancement)
     model = Small_LLM_Model()
@@ -15,6 +16,7 @@ def simple_prompt(prompt: str, max_new_tokens: int) -> None:
     print("Token IDs de départ :", input_ids)
     print("Texte décodé (vérif) :", model.decode(input_ids))
 
+    llm_input = model.encode("")[0].tolist()
     # 3. Boucle de génération token par token (greedy, sans aucune contrainte)
     for step in range(max_new_tokens):
         # a. On demande les logits pour LE PROCHAIN token, étant donné la séquence actuelle
@@ -27,20 +29,27 @@ def simple_prompt(prompt: str, max_new_tokens: int) -> None:
 
         # c. On ajoute le nouveau token à la séquence
         input_ids.append(next_token_id)
+        llm_input.append(next_token_id)
 
         # d. On regarde ce que ça donne en texte à chaque étape (debug pédagogique)
-        print(f"\ntexte partiel = {model.decode(input_ids)!r}")
+        print(f"\ntexte partiel = {model.decode(llm_input)!r}")
 
     print("\n--- Résultat final ---")
     print(model.decode(input_ids))
+    return model.decode(llm_input)
 
 
 def main() -> None:
+
     pars = Parseurjson()
     pars.print_function_call()
     pars.print_function_define()
 
-    simple_prompt(pars.build_prompt(pars.function_call.root[1].prompt), 50)
+    result = simple_prompt(
+        pars.build_prompt(pars.function_call.root[1].prompt), 50
+    )
+    final = Add_Folders("data/output/finalfunc.json", result)
+    final.generate()
 
 
 if __name__ == "__main__":
