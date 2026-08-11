@@ -13,6 +13,12 @@ class ParamSpec(BaseModel):
     type: str
 
 
+class LLMFunctionCall(BaseModel):
+    prompt: str
+    function: str
+    arguments: dict[str, Any]
+
+
 class define_function(BaseModel):
     name: str
     description: str
@@ -122,14 +128,54 @@ class Parseurjson:
             "- Choose exactly ONE function from the list above.",
             "- Respond with ONLY a valid JSON object, nothing else.",
             "- Do not add explanations, comments, or extra text.",
+            '- Valid type values are EXACTLY: "string" or "number". '
+            'Never use "str", "int", "float", or any other type name.',
             "- Use this exact format:",
-            "{",
-            '  "function": "<function_name>",',
-            '  "arguments": { "<param_name>": <value>, ... }',
-            "}",
+            "{\n"
+            + '  "prompt": "<question>"\n'
+            + '  "function": "<function_name>"\n'
+            + '  "arguments": { "<param_name>": <value>, ... }\n'
+            + "}",
             "",
             f"Question: {question}",
             "Answer:",
         ]
 
         return "\n".join(lines)
+
+
+class parth_llm_ouput:
+    def __init__(self, llm_raw_output: str):
+        self.llm_raw_output = llm_raw_output
+
+    def extract_json(self) -> str:
+        """Extrait la sous-chaîne { ... } dans le texte brut, au cas où
+        le modèle aurait généré du texte parasite avant/après (fréquent
+        tant qu'il n'y a pas de constrained decoding)."""
+        start = self.llm_raw_output.find("{")
+        end = self.llm_raw_output.rfind("}")
+        if start == -1 or end == -1 or end < start:
+            raise ValueError("Aucun objet JSON trouvé dans la sortie du LLM.")
+        return self.llm_raw_output[start : end + 1]
+
+    def put_in_dict(self) -> dict[str, Any] | None:
+        try:
+            raw_json = self.extract_json()
+        except ValueError as e:
+            print(color(f"[ERREUR] {e}", 230, 70, 70))
+            return None
+
+        try:
+            data = json.loads(raw_json)
+        except json.JSONDecodeError as e:
+            print(f"[ERREUR] JSON invalide généré par le LLM : {e}")
+            print(f"Contenu brut : {raw_json!r}")
+            return None
+
+        try:
+            validated = LLMFunctionCall.model_validate(data)
+        except ValidationError as e:
+            print(f"[ERREUR] Structure JSON invalide : {e}")
+            return None
+
+        return validated.model_dump()

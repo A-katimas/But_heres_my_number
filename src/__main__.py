@@ -7,33 +7,41 @@ def simple_prompt(
     model: Small_LLM_Model, prompt: str, max_new_tokens: int
 ) -> str:
 
-    # 1. Charger le modèle (télécharge Qwen3-0.6B au premier lancement)()
     print("Hey, I just met you, and this is crazy")
 
-    # 2. Encoder un prompt en une liste de token IDs
-    input_ids = model.encode(prompt)[
-        0
-    ].tolist()  # encode() renvoie un Tensor 2D -> on récupère la liste
+    input_ids = model.encode(prompt)[0].tolist()
     print("Token IDs de départ :", input_ids)
     print("Texte décodé (vérif) :", model.decode(input_ids))
 
     llm_input = model.encode("")[0].tolist()
-    # 3. Boucle de génération token par token (greedy, sans aucune contrainte)
+
+    brace_depth = 0
+    started = False  # on n'a pas encore vu la première "{"
+
     for step in range(max_new_tokens):
-        # a. On demande les logits pour LE PROCHAIN token, étant donné la séquence actuelle
         logits = model.get_logits_from_input_ids(input_ids)
 
-        # b. On choisit le token avec le score le plus élevé (greedy decoding)
-        #    C'est ICI qu'on interviendrait pour faire du constrained decoding :
-        #    on mettrait -inf sur les logits des tokens "invalides" AVANT ce max().
         next_token_id = max(range(len(logits)), key=lambda i: logits[i])
 
-        # c. On ajoute le nouveau token à la séquence
         input_ids.append(next_token_id)
         llm_input.append(next_token_id)
 
-        # d. On regarde ce que ça donne en texte à chaque étape (debug pédagogique)
+        # on décode juste le nouveau token pour suivre l'évolution des accolades
+        piece = model.decode([next_token_id])
+
+        for ch in piece:
+            if ch == "{":
+                brace_depth += 1
+                started = True
+            elif ch == "}":
+                brace_depth -= 1
+
         print(f"\ntexte partiel nb {step} = {model.decode(llm_input)!r}")
+
+        # dès que le JSON est complet (on a ouvert puis refermé toutes les accolades)
+        if started and brace_depth <= 0:
+            print(f"[STOP] JSON complet détecté après {step + 1} tokens")
+            break
 
     print("\n--- Résultat final ---")
     print(model.decode(input_ids))
@@ -47,9 +55,18 @@ def main() -> None:
     pars.print_function_define()
 
     result = simple_prompt(
-        model, pars.build_prompt(pars.function_call.root[1].prompt), 36
+        model,
+        pars.build_prompt(pars.function_call.root[4].prompt),
+        50,
+        # model,
+        # pars.build_prompt("qu'elle est la racine carre de 4"),
+        # 50,
     )
-    final = Add_Folders("data/output/finalfunc.json", result)
+    final = Add_Folders(
+        "data/output/finalfunc.json",
+        result,
+        known_functions=pars.function_define.root,
+    )
     final.generate()
 
 
