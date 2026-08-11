@@ -3,10 +3,11 @@ from parthing import Parseurjson
 from add_folder import Add_Folders
 
 
-def simple_prompt(prompt: str, max_new_tokens: int) -> str:
+def simple_prompt(
+    model: Small_LLM_Model, prompt: str, max_new_tokens: int
+) -> str:
 
-    # 1. Charger le modèle (télécharge Qwen3-0.6B au premier lancement)
-    model = Small_LLM_Model()
+    # 1. Charger le modèle (télécharge Qwen3-0.6B au premier lancement)()
     print("Hey, I just met you, and this is crazy")
 
     # 2. Encoder un prompt en une liste de token IDs
@@ -32,7 +33,7 @@ def simple_prompt(prompt: str, max_new_tokens: int) -> str:
         llm_input.append(next_token_id)
 
         # d. On regarde ce que ça donne en texte à chaque étape (debug pédagogique)
-        print(f"\ntexte partiel = {model.decode(llm_input)!r}")
+        print(f"\ntexte partiel nb {step} = {model.decode(llm_input)!r}")
 
     print("\n--- Résultat final ---")
     print(model.decode(input_ids))
@@ -40,13 +41,13 @@ def simple_prompt(prompt: str, max_new_tokens: int) -> str:
 
 
 def main() -> None:
-
+    model = Small_LLM_Model()
     pars = Parseurjson()
     pars.print_function_call()
     pars.print_function_define()
 
     result = simple_prompt(
-        pars.build_prompt(pars.function_call.root[1].prompt), 50
+        model, pars.build_prompt(pars.function_call.root[1].prompt), 36
     )
     final = Add_Folders("data/output/finalfunc.json", result)
     final.generate()

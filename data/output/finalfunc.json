@@ -1,4 +1,3 @@
-
 {
   "function": "fn_add_numbers",
   "arguments": {"a": "265", "b": "345"}
