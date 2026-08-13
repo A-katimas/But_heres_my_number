@@ -55,12 +55,12 @@ def main() -> None:
     pars.print_function_define()
 
     result = simple_prompt(
-        model,
-        pars.build_prompt(pars.function_call.root[4].prompt),
-        50,
         # model,
-        # pars.build_prompt("qu'elle est la racine carre de 4"),
+        # pars.build_prompt(pars.function_call.root[4].prompt),
         # 50,
+        model,
+        pars.build_prompt("4の2乗であること"),
+        50,
     )
     final = Add_Folders(
         "data/output/finalfunc.json",

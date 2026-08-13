@@ -128,8 +128,8 @@ class Parseurjson:
             "- Choose exactly ONE function from the list above.",
             "- Respond with ONLY a valid JSON object, nothing else.",
             "- Do not add explanations, comments, or extra text.",
-            '- Valid type values are EXACTLY: "string" or "number". '
-            'Never use "str", "int", "float", or any other type name.',
+            '- Valid type values are EXACTLY: "integer", "string" or "number". '
+            'Never use "str", "int", "float" , or any other type name.',
             "- Use this exact format:",
             "{\n"
             + '  "prompt": "<question>"\n'

@@ -1,7 +1,7 @@
 {
-  "prompt": "Reverse the string 'hello'",
-  "function": "fn_reverse_string",
+  "prompt": "4の2乗であること",
+  "function": "fn_get_square_root",
   "arguments": {
-    "s": "hello"
+    "a": "4"
   }
 }
