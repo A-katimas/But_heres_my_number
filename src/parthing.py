@@ -131,14 +131,11 @@ class Parseurjson:
             '- Valid type values are EXACTLY: "integer", "string" or "number". '
             'Never use "str", "int", "float" , or any other type name.',
             "- Use this exact format:",
-            "{\n"
-            + '  "prompt": "<question>"\n'
-            + '  "function": "<function_name>"\n'
-            + '  "arguments": { "<param_name>": <value>, ... }\n'
-            + "}",
-            "",
+            '  "function": "<function_name>"\n'
+            + '  "arguments": { "<param_name>": <value>, ... }\n',
+            "}",
             f"Question: {question}",
-            "Answer:",
+            'Answer: {"prompt": "' + question + '",',
         ]
 
         return "\n".join(lines)

@@ -1,7 +1,7 @@
 {
-  "prompt": "4の2乗であること",
-  "function": "fn_get_square_root",
+  "prompt": "henri me dit ",
+  "function": "fn_greet",
   "arguments": {
-    "a": "4"
+    "name": "henri"
   }
 }
