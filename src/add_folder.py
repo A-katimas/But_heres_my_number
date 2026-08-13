@@ -1,6 +1,13 @@
 import json
-from parthing import parth_llm_ouput, define_function
+from parthing import parth_llm_ouput, define_function, LLMFunctionCall
 from use_terminal.color import color
+
+
+class MyEncoder(json.JSONEncoder):
+    def default(self, o: object):
+        if isinstance(o, LLMFunctionCall):
+            return o.model_dump()
+        return super().default(o)
 
 
 class Add_Folders:
@@ -19,23 +26,24 @@ class Add_Folders:
         result = parser.put_in_dict()
 
         if result is None:
-            print("la")
             return None
 
-        matching_fn = next(
-            (
-                fn
-                for fn in self.known_functions
-                if fn.name == result["function"]
-            ),
-            None,
-        )
+        func_name_list = [func.name for func in self.known_functions]
 
-        if matching_fn is None:
-            print(f"[ERREUR] Fonction inconnue : '{result['function']}'")
+        if not all(
+            [func_call.function in func_name_list for func_call in result]
+        ):
+            print(
+                color("uknow func name", 40, 200, 150),
+                [
+                    call.function
+                    for call in result
+                    if call.function not in func_name_list
+                ],
+            )
             return None
 
-        if not result["prompt"][0]:
+        if not all(call.prompt for call in result):
             print(
                 color(
                     f"[ERREUR] no prompt return ",
@@ -46,19 +54,6 @@ class Add_Folders:
             )
             return None
 
-        # if result["returns"]["type"] != matching_fn.returns.type:
-        #     print(
-        #         color(
-        #             f"[ERREUR] Type de retour incohérent : le LLM a dit ",
-        #             200,
-        #             150,
-        #             50,
-        #         ),
-        #         f"'{result['returns']['type']}', attendu "
-        #         f"'{matching_fn.returns.type}' pour {result['function']}",
-        #     )
-        #     return None
-
         return result
 
     def generate(self) -> None:
@@ -68,7 +63,10 @@ class Add_Folders:
             print(f"[ABANDON] Écriture annulée, sortie du LLM invalide.")
             return
 
+        print(f"\n\n{parsed}\n\n", flush=True)
         with open(self.name_output, "w+", encoding="utf-8") as file:
-            json.dump(parsed, file, indent=2, ensure_ascii=False)
+            json.dump(
+                parsed, file, indent=2, ensure_ascii=False, cls=MyEncoder
+            )
 
         print(color(f"[OK] llm has good job {self.name_output}", 100, 230, 70))

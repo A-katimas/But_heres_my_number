@@ -8,7 +8,6 @@ from use_terminal.color import color
 # Modèles pour functions_definition.json
 # ---------------------------------------------------------------------------
 
-
 class ParamSpec(BaseModel):
     type: str
 
@@ -153,9 +152,9 @@ class parth_llm_ouput:
         end = self.llm_raw_output.rfind("}")
         if start == -1 or end == -1 or end < start:
             raise ValueError("Aucun objet JSON trouvé dans la sortie du LLM.")
-        return self.llm_raw_output[start : end + 1]
+        return "[\n" + self.llm_raw_output[start : end + 1] + "\n]"
 
-    def put_in_dict(self) -> dict[str, Any] | None:
+    def put_in_dict(self) -> list[dict[str, Any]] | None:
         try:
             raw_json = self.extract_json()
         except ValueError as e:
@@ -163,16 +162,27 @@ class parth_llm_ouput:
             return None
 
         try:
+            print(raw_json)
             data = json.loads(raw_json)
         except json.JSONDecodeError as e:
-            print(f"[ERREUR] JSON invalide généré par le LLM : {e}")
+            print(
+                color(
+                    f"[ERREUR] JSON invalide généré par le LLM : {e}",
+                    200,
+                    100,
+                    70,
+                )
+            )
             print(f"Contenu brut : {raw_json!r}")
             return None
 
         try:
-            validated = LLMFunctionCall.model_validate(data)
+            validated = [
+                LLMFunctionCall.model_validate(function_call)
+                for function_call in data
+            ]
         except ValidationError as e:
-            print(f"[ERREUR] Structure JSON invalide : {e}")
+            print(color (f"[ERREUR] Structure JSON invalide : {e}",255,150,100))
             return None
 
-        return validated.model_dump()
+        return validated

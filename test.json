@@ -1,0 +1,2 @@
+[{"prompt": "What is the sum of 2 and 3?", "function":  "fn_add_numbers", "arguments": {"a": 2, "b": 3}},
+{"prompt": "What is the sum of 265 and 345?", "function":  "fn_add_numbers", "arguments": {"a": 265, "b": 345}}]
