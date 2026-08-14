@@ -22,10 +22,12 @@ debug:
 	@$(PYTHON) -m pdb -m $(SRC)
 
 lint:
-	@uv run $(PYTHON) -m flake8 . --max-line-length=79 --exclude=.venv,llm_sdk
-	@uv run $(PYTHON) -m mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+	@$(PYTHON) -m flake8 . --max-line-length=79 --exclude=.venv,llm_sdk
+	@$(PYTHON) -m mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
-lint-strict: lint
+lint-strict:
+	@$(PYTHON) -m flake8 . --max-line-length=79 --exclude=.venv,llm_sdk
+	@$(PYTHON) -m mypy . --strict
 
 clean:
 	@echo ">>> Suppression des fichiers temporaires..."
@@ -33,6 +35,7 @@ clean:
 	find . -name "*.pyc" -delete
 	find . -name "*.pyo" -delete
 	find . -name "__pycache__" -delete
+	find . -type d -name "*.egg-info"
 	@echo ">>> Clean OK !"
 
 fclean: clean
