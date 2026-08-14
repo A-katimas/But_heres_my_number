@@ -9,7 +9,7 @@ def simple_prompt(
 ) -> str:
 
     print("Hey, I just met you, and this is crazy")
-    #llm_start = '{"prompt": \n"' + promptquest + '"\n, "function": '
+    # llm_start = '{"prompt": \n"' + promptquest + '"\n, "function": '
     prompt_json = json.dumps(promptquest)  # échappe correctement " et \
     llm_start = '{"prompt": \n' + prompt_json + '\n, "function": '
     input_ids = model.encode(prompt + llm_start)[0].tolist()
@@ -96,8 +96,8 @@ def main() -> None:
     pars.print_function_define()
 
     all_prompt = pars.function_call.root
-    prompt = "henri me dit "
-    result = all_try(model, pars, all_prompt)
+    prompt = "combien font 5+4"
+    result = all_try(model, pars, prompt)
 
     final = Add_Folders(
         "data/output/finalfunc.json",

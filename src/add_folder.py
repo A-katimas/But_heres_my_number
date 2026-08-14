@@ -1,6 +1,6 @@
 import json
 from parthing import parth_llm_ouput, define_function, LLMFunctionCall
-from use_terminal.color import color
+from src.use_terminal.color import color
 
 
 class MyEncoder(json.JSONEncoder):
@@ -34,7 +34,7 @@ class Add_Folders:
             [func_call.function in func_name_list for func_call in result]
         ):
             print(
-                color("unknow function name", 40, 200, 150),
+                color("unknow function name", 40, 100, 150),
                 [
                     call.function
                     for call in result
@@ -60,7 +60,7 @@ class Add_Folders:
         parsed = self.parth_folders()
 
         if parsed is None:
-            print(f"[ABANDON] Écriture annulée, sortie du LLM invalide.")
+            print(color(f"[ABANDON] Écriture annulée, sortie du LLM invalide.",170,130,60))
             return
 
         print(f"\n\n{parsed}\n\n", flush=True)
@@ -70,3 +70,14 @@ class Add_Folders:
             )
 
         print(color(f"[OK] llm has good job {self.name_output}", 100, 230, 70))
+
+#,
+#  {
+#    "name" : "fn_test",
+#    "description" : "This is a test function for testing purposes.",
+#    "parameters" : {},
+#    "returns" : {
+#      "type" : "string",
+#      "type2" : "string"
+#    }
+#  }

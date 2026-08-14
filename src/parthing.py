@@ -2,11 +2,12 @@ import json
 import sys
 from typing import Any
 from pydantic import BaseModel, RootModel, ValidationError
-from use_terminal.color import color
+from src.use_terminal.color import color
 
 # ---------------------------------------------------------------------------
 # Modèles pour functions_definition.json
 # ---------------------------------------------------------------------------
+
 
 class ParamSpec(BaseModel):
     type: str
@@ -148,6 +149,8 @@ class parth_llm_ouput:
         """Extrait la sous-chaîne { ... } dans le texte brut, au cas où
         le modèle aurait généré du texte parasite avant/après (fréquent
         tant qu'il n'y a pas de constrained decoding)."""
+        if self.llm_raw_output == "[]":
+            return "[]"
         start = self.llm_raw_output.find("{")
         end = self.llm_raw_output.rfind("}")
         if start == -1 or end == -1 or end < start:
@@ -182,7 +185,9 @@ class parth_llm_ouput:
                 for function_call in data
             ]
         except ValidationError as e:
-            print(color (f"[ERREUR] Structure JSON invalide : {e}",255,150,100))
+            print(
+                color(f"[ERREUR] Structure JSON invalide : {e}", 255, 150, 100)
+            )
             return None
 
         return validated

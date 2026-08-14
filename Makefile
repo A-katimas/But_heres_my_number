@@ -22,7 +22,7 @@ debug:
 	@$(PYTHON) -m pdb -m $(SRC)
 
 lint:
-	@uv run $(PYTHON) -m flake8 . --max-line-length=79 --extend-exclude .venv
+	@uv run $(PYTHON) -m flake8 . --max-line-length=79 --exclude=.venv,llm_sdk
 	@uv run $(PYTHON) -m mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict: lint
