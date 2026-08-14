@@ -34,7 +34,7 @@ class Add_Folders:
             [func_call.function in func_name_list for func_call in result]
         ):
             print(
-                color("uknow func name", 40, 200, 150),
+                color("unknow func name", 40, 200, 150),
                 [
                     call.function
                     for call in result
