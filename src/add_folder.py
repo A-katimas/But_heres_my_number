@@ -60,7 +60,14 @@ class Add_Folders:
         parsed = self.parth_folders()
 
         if parsed is None:
-            print(color(f"[ABANDON] Écriture annulée, sortie du LLM invalide.",170,130,60))
+            print(
+                color(
+                    f"[ABANDON] Écriture annulée, sortie du LLM invalide.",
+                    170,
+                    130,
+                    60,
+                )
+            )
             return
 
         print(f"\n\n{parsed}\n\n", flush=True)
@@ -70,14 +77,3 @@ class Add_Folders:
             )
 
         print(color(f"[OK] llm has good job {self.name_output}", 100, 230, 70))
-
-#,
-#  {
-#    "name" : "fn_test",
-#    "description" : "This is a test function for testing purposes.",
-#    "parameters" : {},
-#    "returns" : {
-#      "type" : "string",
-#      "type2" : "string"
-#    }
-#  }

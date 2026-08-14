@@ -31,11 +31,11 @@ lint-strict:
 
 clean:
 	@echo ">>> Suppression des fichiers temporaires..."
-	rm -rf $(TMP_DIRS)
-	find . -name "*.pyc" -delete
-	find . -name "*.pyo" -delete
-	find . -name "__pycache__" -delete
-	find . -type d -name "*.egg-info"
+	@rm -rf $(TMP_DIRS)
+	@find . -name "*.pyc" -delete
+	@find . -name "*.pyo" -delete
+	@find . -type d -name "__pycache__" -prune -exec rm -rf {} +
+	@find . -type d -name "*.egg-info" -prune -exec rm -rf {} +
 	@echo ">>> Clean OK !"
 
 fclean: clean

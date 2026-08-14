@@ -37,6 +37,7 @@ class LlmUsed:
         ]
 
         for fn in self.data.function_define.root:
+
             lines.append(f"- {fn.name}")
             lines.append(f"  description: {fn.description}")
             params = fn.parameters
