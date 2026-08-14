@@ -93,53 +93,6 @@ class Parseurjson:
                 f"-> returns: {function.returns.type}",
             )
 
-    def build_prompt(self, question: str) -> str:
-        """
-        functions: liste de dicts au format
-            {
-                "name": "fn_add_numbers",
-                "description": "Add two numbers together and return their sum.",
-                "parameters": {"a": "number", "b": "number"}
-            }
-        question: le prompt utilisateur (ex: "What is 265 + 345?")
-        """
-
-        lines = [
-            "You are a function-calling assistant.",
-            "Your job is to select the single most appropriate function "
-            "for the user's question and extract its arguments.",
-            "",
-            "Available functions:",
-            "",
-        ]
-
-        for fn in self.function_define.root:
-            lines.append(f"- {fn.name}")
-            lines.append(f"  description: {fn.description}")
-            params = fn.parameters
-            if params:
-                lines.append(f"  parameters: {params}")
-            else:
-                lines.append("  parameters: none")
-            lines.append("")
-
-        lines += [
-            "Rules:",
-            "- Choose exactly ONE function from the list above.",
-            "- Respond with ONLY a valid JSON object, nothing else.",
-            "- Do not add explanations, comments, or extra text.",
-            '- Valid type values are EXACTLY: "integer", "string" or "number". '
-            'Never use "str", "int", "float" , or any other type name.',
-            "- Use this exact format:",
-            '  "function": "<function_name>"\n'
-            + '  "arguments": { "<param_name>": <value>, ... }\n',
-            "}",
-            f"Question: {question}",
-            'Answer: {"prompt": "' + question + '",',
-        ]
-
-        return "\n".join(lines)
-
 
 class parth_llm_ouput:
     def __init__(self, llm_raw_output: str):
