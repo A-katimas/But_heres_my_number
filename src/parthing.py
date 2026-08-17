@@ -26,7 +26,7 @@ class define_function(BaseModel):
     returns: ParamSpec
 
 
-class all_functions(RootModel):
+class all_functions(RootModel[list[define_function]]):
     root: list[define_function]
 
 
@@ -34,7 +34,7 @@ class define_prompt(BaseModel):
     prompt: str
 
 
-class all_prompts(RootModel):
+class all_prompts(RootModel[list[define_prompt]]):
     root: list[define_prompt]
 
 
@@ -44,10 +44,10 @@ class Parseurjson:
         function_call: str = "data/input/function_calling_tests.json",
         function_define: str = "data/input/functions_definition.json",
     ):
-        self.function_call = self.validate_or_stop(
+        self.function_call: all_prompts = self.validate_or_stop(
             all_prompts, self.readjson(function_call), source=function_call
         )
-        self.function_define = self.validate_or_stop(
+        self.function_define: all_functions = self.validate_or_stop(
             all_functions,
             self.readjson(function_define),
             source=function_define,
@@ -63,8 +63,8 @@ class Parseurjson:
             sys.exit(1)
 
     def validate_or_stop(
-        self, model: type[RootModel], data: list[Any], source: str
-    ) -> RootModel:
+        self, model: type[RootModel[Any]], data: list[Any], source: str
+    ) -> Any:
         """Valide tout le fichier d'un coup. Si une seule entrée est invalide,
         affiche un message clair et arrête le programme."""
         try:
@@ -108,9 +108,9 @@ class parth_llm_ouput:
         end = self.llm_raw_output.rfind("}")
         if start == -1 or end == -1 or end < start:
             raise ValueError("Aucun objet JSON trouvé dans la sortie du LLM.")
-        return "[\n" + self.llm_raw_output[start : end + 1] + "\n]"
+        return "[\n" + self.llm_raw_output[start:end + 1] + "\n]"
 
-    def put_in_dict(self) -> list[dict[str, Any]] | None:
+    def put_in_dict(self) -> list[LLMFunctionCall] | None:
         try:
             raw_json = self.extract_json()
         except ValueError as e:

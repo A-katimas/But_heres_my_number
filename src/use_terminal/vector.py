@@ -1,4 +1,5 @@
-from typing import Any, Iterator, cast, Iterable, Self
+from __future__ import annotations
+from typing import Any, Iterator, cast, Iterable
 
 
 class Vector:
@@ -24,7 +25,7 @@ class Vector:
                 f"cant initialise {self.__class__.__name__} with {args}"
             )
 
-    def __add__(self, other: Any) -> Self:
+    def __add__(self, other: Any) -> Vector:
         """
         Add two vectors or a vector and a compatible iterable.
         """
@@ -39,7 +40,7 @@ class Vector:
             )
         raise TypeError(f"cant add {self} to {other}")
 
-    def __sub__(self, other: Any) -> Self:
+    def __sub__(self, other: Any) -> Vector:
         """
         Subtract two vectors or a vector and a compatible iterable.
         """
@@ -54,7 +55,7 @@ class Vector:
             )
         raise TypeError(f"cant sub {self} to {other}")
 
-    def __mul__(self, other: Any | int | float) -> Self:
+    def __mul__(self, other: Any | int | float) -> Vector:
         """
         Multiply two vectors or a vector and a compatible iterable.
         """
@@ -84,7 +85,7 @@ class Vector:
 
         raise TypeError(f"cant mul {self} to {other}")
 
-    def __truediv__(self, other: Any) -> Self:
+    def __truediv__(self, other: Any) -> Vector:
         """
         Divide two vectors or a vector and a compatible iterable.
         """
@@ -108,7 +109,7 @@ class Vector:
             )
         raise TypeError(f"cant div {self} to {other}")
 
-    def __floordiv__(self, other: Any) -> Self:
+    def __floordiv__(self, other: Any) -> Vector:
         """
         Perform floor division on two vectors or a vector
         and a compatible iterable.
@@ -171,14 +172,14 @@ class Vector:
         Return a string representation of the vector.
         """
         clsname = self.__class__.__name__
-        return f"{clsname}({", ".join([str(dim) for dim in self._dim_pos])})"
+        return f"{clsname}({', '.join(str(dim) for dim in self._dim_pos)})"
 
     def __str__(self) -> str:
         """
         Return a string representation of the vector.
         """
         clsname = self.__class__.__name__
-        return f"{clsname}({", ".join([str(dim) for dim in self._dim_pos])})"
+        return f"{clsname}({', '.join(str(dim) for dim in self._dim_pos)})"
 
     def __format__(self, format_spec: Any) -> str:
         """
@@ -190,7 +191,7 @@ class Vector:
                 result.append(self._dim_pos[i])
         return "(" + " ".join([str(a) for a in result]) + ")"
 
-    def __round__(self, ndigits: Any) -> Self:
+    def __round__(self, ndigits: Any) -> Vector:
         """
         Round the dimensions of the vector to the specified number of digits.
         """

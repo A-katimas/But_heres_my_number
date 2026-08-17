@@ -2,7 +2,7 @@ import json
 from llm_sdk import Small_LLM_Model
 from parthing import Parseurjson
 from use_terminal.color import chose_color
-from typing import Literal
+from typing import Literal, Any
 
 
 class LlmUsed:
@@ -17,14 +17,14 @@ class LlmUsed:
         self.data = data
         self.prompt = prompt
         self.max_token = maxtoken
-        self.all_func_name: list = [e.name for e in data.function_define.root]
+        self.all_func_name = [e.name for e in data.function_define.root]
 
-    def build_prompt(self, question: str) -> str:
+    def build_prompt(self, question: str) -> Any:
         """
         functions: liste de dicts au format
             {
                 "name": "fn_add_numbers",
-                "description": "Add two numbers together and return their sum.",
+                "description": "you know ",
                 "parameters": {"a": "number", "b": "number"}
             }
         question: le prompt utilisateur (ex: "What is 265 + 345?")
@@ -55,8 +55,8 @@ class LlmUsed:
             "- Choose exactly ONE function from the list above.",
             "- Respond with ONLY a valid JSON object, nothing else.",
             "- Do not add explanations, comments, or extra text.",
-            '- Valid type values are EXACTLY: "integer", "string" or "number". '
-            'Never use "str", "int", "float" , or any other type name.',
+            '- Valid type values are EXACTLY: "integer", "string" or "number".'
+            ' Never use "str", "int", "float" , or any other type name.',
             '- If say asterisks replace it with "*"'
             "- Use this exact format:",
             '  "name": "<function_name>"\n'
@@ -68,7 +68,7 @@ class LlmUsed:
 
         return "\n".join(lines)
 
-    def autocomplete_func(self, texte: str) -> str | None:
+    def autocomplete_func(self, texte: str) -> Any | None:
         """Retourne la fonction complète si une seule correspond."""
         resultats = [f for f in self.all_func_name if f.startswith(texte)]
 
@@ -96,7 +96,7 @@ class LlmUsed:
         if function_complete is None:
             return function_text, False
 
-        remaining = function_complete[len(function_text) :]
+        remaining = function_complete[len(function_text):]
 
         if not remaining:
             return function_text, True
@@ -111,7 +111,7 @@ class LlmUsed:
 
         return function_complete, True
 
-    def use_prompt(self, promptquest: str) -> str:
+    def use_prompt(self, promptquest: str | Any) -> Any | str:
 
         built_prompt = self.build_prompt(promptquest)
         print(chose_color("Hey, I just met you, and this is crazy", 11))
@@ -178,13 +178,13 @@ class LlmUsed:
 
     def launch(self) -> str:
         if self.prompt:
-            result = self.use_prompt(self.prompt)
+            return self.use_prompt(self.prompt)
 
-        else:
-            self.prompt = self.data.function_call.root
-            result = ",\n".join(
-                self.use_prompt(llm_result.prompt)
-                for llm_result in self.prompt
-            )
-            result = "[" + result + "]"
-        return result
+        function_calls = self.data.function_call.root
+
+        result = ",\n".join(
+            self.use_prompt(llm_result.prompt)
+            for llm_result in function_calls
+        )
+
+        return "[" + result + "]"

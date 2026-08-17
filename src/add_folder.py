@@ -1,10 +1,11 @@
 import json
 from parthing import parth_llm_ouput, define_function, LLMFunctionCall
 from src.use_terminal.color import color
+from typing import Any
 
 
 class MyEncoder(json.JSONEncoder):
-    def default(self, o: object):
+    def default(self, o: object) -> Any:
         if isinstance(o, LLMFunctionCall):
             return o.model_dump()
         return super().default(o)
@@ -21,7 +22,7 @@ class Add_Folders:
         self.data_input = data_input
         self.known_functions = known_functions or []
 
-    def parth_folders(self) -> dict | None:
+    def parth_folders(self) -> Any | None:
         parser = parth_llm_ouput(self.data_input)
         result = parser.put_in_dict()
 
@@ -44,7 +45,7 @@ class Add_Folders:
         if not all(call.prompt for call in result):
             print(
                 color(
-                    f"[ERREUR] no prompt return ",
+                    "[ERREUR] no prompt return ",
                     200,
                     150,
                     50,
@@ -60,7 +61,7 @@ class Add_Folders:
         if parsed is None:
             print(
                 color(
-                    f"[ABANDON] Écriture annulée, sortie du LLM invalide.",
+                    "[ABANDON] Écriture annulée, sortie du LLM invalide.",
                     170,
                     130,
                     60,
