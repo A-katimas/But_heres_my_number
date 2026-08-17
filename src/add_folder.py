@@ -30,9 +30,7 @@ class Add_Folders:
 
         func_name_list = [func.name for func in self.known_functions]
 
-        if not all(
-            [func_call.function in func_name_list for func_call in result]
-        ):
+        if not all([func_call.name in func_name_list for func_call in result]):
             print(
                 color("unknow function name", 40, 100, 150),
                 [

@@ -15,7 +15,7 @@ class ParamSpec(BaseModel):
 
 class LLMFunctionCall(BaseModel):
     prompt: str
-    function: str
+    name: str
     arguments: dict[str, Any]
 
 
@@ -133,6 +133,7 @@ class parth_llm_ouput:
             return None
 
         try:
+            print(data)
             validated = [
                 LLMFunctionCall.model_validate(function_call)
                 for function_call in data
