@@ -22,36 +22,104 @@ class Add_Folders:
         self.data_input = data_input
         self.known_functions = known_functions or []
 
-    def parth_folders(self) -> Any | None:
+    def convert_parameters(
+        self,
+        call: LLMFunctionCall,
+        function: define_function,
+    ) -> bool:
+        """Convertit les paramètres selon la définition de la fonction."""
+
+        for param_name, param_value in call.parameters.items():
+            param_spec = function.parameters.get(param_name)
+
+            if param_spec is None:
+                print(
+                    color(
+                        f"[ERREUR] Paramètre inconnu : {param_name}",
+                        200,
+                        80,
+                        80,
+                    )
+                )
+                return False
+
+            try:
+                if param_spec.type == "integer":
+                    call.parameters[param_name] = int(param_value)
+
+                elif param_spec.type == "number":
+                    call.parameters[param_name] = float(param_value)
+
+                elif param_spec.type == "string":
+                    call.parameters[param_name] = str(param_value)
+
+                else:
+                    print(
+                        color(
+                            f"[ERREUR] Type inconnu : {param_spec.type}",
+                            200,
+                            80,
+                            80,
+                        )
+                    )
+                    return False
+
+            except (ValueError, TypeError):
+                print(
+                    color(
+                        f"[ERREUR] Impossible de convertir "
+                        f"{param_name}={param_value!r} "
+                        f"en {param_spec.type}",
+                        200,
+                        80,
+                        80,
+                    )
+                )
+                return False
+
+        return True
+
+    def parth_folders(self) -> list[LLMFunctionCall] | None:
         parser = parth_llm_ouput(self.data_input)
-        result = parser.put_in_dict()
+        result: list[LLMFunctionCall] | None = parser.put_in_dict()
 
         if result is None:
             return None
 
-        func_name_list = [func.name for func in self.known_functions]
-
-        if not all([func_call.name in func_name_list for func_call in result]):
-            print(
-                color("unknow function name", 40, 100, 150),
-                [
-                    call.function
-                    for call in result
-                    if call.function not in func_name_list
-                ],
+        for call in result:
+            function = next(
+                (
+                    func
+                    for func in self.known_functions
+                    if func.name == call.name
+                ),
+                None,
             )
-            return None
 
-        if not all(call.prompt for call in result):
-            print(
-                color(
-                    "[ERREUR] no prompt return ",
-                    200,
-                    150,
-                    50,
+            if function is None:
+                print(
+                    color(
+                        f"[ERREUR] Fonction inconnue : {call.name}",
+                        40,
+                        100,
+                        150,
+                    )
                 )
-            )
-            return None
+                return None
+
+            if not call.prompt:
+                print(
+                    color(
+                        "[ERREUR] no prompt return",
+                        200,
+                        150,
+                        50,
+                    )
+                )
+                return None
+
+            if not self.convert_parameters(call, function):
+                return None
 
         return result
 

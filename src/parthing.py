@@ -1,6 +1,6 @@
 import json
 import sys
-from typing import Any
+from typing import Any, Literal
 from pydantic import BaseModel, RootModel, ValidationError
 from src.use_terminal.color import color
 
@@ -10,7 +10,7 @@ from src.use_terminal.color import color
 
 
 class ParamSpec(BaseModel):
-    type: str
+    type: Literal["integer", "string", "number", "bool"]
 
 
 class LLMFunctionCall(BaseModel):
