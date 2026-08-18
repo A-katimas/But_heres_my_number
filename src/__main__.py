@@ -1,5 +1,5 @@
-from llm_sdk import Small_LLM_Model
 from parthing import Parseurjson
+from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
 from add_folder import Add_Folders
 from llm_used import LlmUsed
 

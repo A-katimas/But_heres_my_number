@@ -1,5 +1,5 @@
 import json
-from llm_sdk import Small_LLM_Model
+from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
 from parthing import Parseurjson
 from use_terminal.color import chose_color
 from typing import Literal, Any
@@ -38,7 +38,6 @@ class LlmUsed:
             "Available functions:",
             "",
         ]
-        print(self.all_func_name)
         for fn in self.data.function_define.root:
 
             lines.append(f"- {fn.name}")

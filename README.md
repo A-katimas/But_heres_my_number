@@ -45,7 +45,7 @@ make run
 this program must have two json files included in the data/input folder with both file name specify in the subject
 | Folders_Name |how to implement | what it does|
 |--------------|-----------------|-------------|
-| function_calling_tests.json | [ {"prompt" : "<insert your prompt>"} ] | it will put your prompt as it goes into the machine|
-| functions_definition.json | [ {"name" : "<enter name>", "description" : "<insert descrition>", "parameters" : {<put all your parameter with like a json>},"return" :  {put you'r returns} } ] | has the machine to know what to return |
+| function_calling_tests.json | [ {"prompt" : "\<insert your prompt>"} ] | it will put your prompt as it goes into the machine|
+| functions_definition.json | [ {"name" : "\<enter name>", "description" : "\<insert descrition>", "parameters" : {\<put all your parameter with like a json>},"return" :  { \<put you'r returns>} } ] | has the machine to know what to return |
 
 
