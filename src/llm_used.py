@@ -54,9 +54,10 @@ class LlmUsed:
             "- Choose exactly ONE function from the list above.",
             "- Respond with ONLY a valid JSON object, nothing else.",
             "- Do not add explanations, comments, or extra text.",
-            '- Valid type values are EXACTLY: "integer", "string" or "number".'
-            ' Never use "str", "int", "float" , or any other type name.',
-            '- If say asterisks replace it with "*"'
+            '- you need to use the right type : "integer", "string" '
+            'or "number".',
+            '- if the type is "number" put ".0" behind the number',
+            '- If say asterisks replace it with "*"',
             "- Use this exact format:",
             '  "name": "<function_name>"\n'
             + '  "parameters": { "<param_name>": <value>, ... }\n',

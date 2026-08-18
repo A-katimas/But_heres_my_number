@@ -1,5 +1,3 @@
-# But_heres_my_number
-so call me maybe
 *This project has been created as part of the 42 curriculum by jtardieu*
 
 # Call-Me-Maybe
@@ -28,6 +26,10 @@ call me maybe is a project using LLM the principle is to know how to make a prom
 ```bash
 make run
 ```
+or
+```bash
+uv run python -m src [--functions_definition <file>] [--input <file>] [--output <file>]
+```
 
 ## ⚙️ How to Run
 
@@ -48,4 +50,31 @@ this program must have two json files included in the data/input folder with bot
 | function_calling_tests.json | [ {"prompt" : "\<insert your prompt>"} ] | it will put your prompt as it goes into the machine|
 | functions_definition.json | [ {"name" : "\<enter name>", "description" : "\<insert descrition>", "parameters" : {\<put all your parameter with like a json>},"return" :  { \<put you'r returns>} } ] | has the machine to know what to return |
 
+## 📚 Resources
+
+### 🙏 Human Help
+
+| Person | Contribution |
+|--------|--------------|
+| 👤 **aspenle** | he helps me with everything related to understanding the subject and guides me throughout the project |
+| 👤 **aspenle** | he encouraged me and explained what I hadn't understood very well |
+
+Huge thanks to them! 💪
+
+### 🤖 AI Usage
+
+| What | Tool | How |
+|------|------|-----|
+| information | chatgpt | to find some information with llm and how to use them |
+| debuging | claude | to correct certain errors and guide me on the parthing standard |
+
+
+## 🎓 What I Learn
+
+✅ how to parse a json file  
+✅ how to use a LLM  
+✅ a new methode to used pydantics  
+✅ how to used an externe librairies  
+✅ how to used a json files  
+✅ strengthens my .toml knowlege  
 

@@ -6,6 +6,7 @@ from argparse import Namespace, ArgumentParser
 
 
 def inputpath() -> Namespace:
+    """creates an argument parther"""
     parth = ArgumentParser(exit_on_error=False)
     parth.add_argument(
         "--functions_definition",
@@ -35,19 +36,19 @@ def main() -> None:
         pars = Parseurjson(arg.input, arg.functions_definition)
         pars.print_function_call()
         pars.print_function_define()
+
+        usedllm = LlmUsed(model, pars)
+        result = usedllm.launch()
+
+        final = Add_Folders(
+            arg.output,
+            result,
+            known_functions=pars.function_define.root,
+        )
+        final.generate()
+
     except Exception as e:
         print(e, "occured in intialisation")
-
-    usedllm = LlmUsed(model, pars)
-
-    result = usedllm.launch()
-
-    final = Add_Folders(
-        arg.output,
-        result,
-        known_functions=pars.function_define.root,
-    )
-    final.generate()
 
 
 if __name__ == "__main__":
