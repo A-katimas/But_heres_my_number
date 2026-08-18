@@ -17,6 +17,8 @@ run:
 	@echo ">>> Lancement de la simulation..."
 	$(PYTHON) -m $(SRC)
 
+runjust1:
+	$(PYTHON) -m $(SRC) --input "data/input/function_just_one.json"
 
 debug:
 	@$(PYTHON) -m pdb -m $(SRC)
@@ -41,7 +43,6 @@ clean:
 fclean: clean
 	@echo ">>> Suppression du venv..."
 	@rm -rf $(VENV)
-	@rm -rf uv.lock
 	@echo ">>> FClean OK !"
 
 .PHONY: run install debug clean fclean lint lint-strict

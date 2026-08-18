@@ -16,7 +16,7 @@ class ParamSpec(BaseModel):
 class LLMFunctionCall(BaseModel):
     prompt: str
     name: str
-    arguments: dict[str, Any]
+    parameters: dict[str, Any]
 
 
 class define_function(BaseModel):

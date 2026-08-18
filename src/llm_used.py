@@ -59,7 +59,7 @@ class LlmUsed:
             '- If say asterisks replace it with "*"'
             "- Use this exact format:",
             '  "name": "<function_name>"\n'
-            + '  "arguments": { "<param_name>": <value>, ... }\n',
+            + '  "parameters": { "<param_name>": <value>, ... }\n',
             "}",
             f"Question: {question}",
             'Answer: {"prompt": "' + question + '",',
@@ -100,7 +100,7 @@ class LlmUsed:
         if not remaining:
             return function_text, True
 
-        remaining += '", "arguments": '
+        remaining += '", "parameters": '
         completion_tokens = self.model.encode(remaining)[0].tolist()
 
         input_ids.extend(completion_tokens)
@@ -182,8 +182,7 @@ class LlmUsed:
         function_calls = self.data.function_call.root
 
         result = ",\n".join(
-            self.use_prompt(llm_result.prompt)
-            for llm_result in function_calls
+            self.use_prompt(llm_result.prompt) for llm_result in function_calls
         )
 
         return "[" + result + "]"
