@@ -6,6 +6,7 @@ from typing import Any
 
 class MyEncoder(json.JSONEncoder):
     def default(self, o: object) -> Any:
+        """allows you to check input instances"""
         if isinstance(o, LLMFunctionCall):
             return o.model_dump()
         return super().default(o)
@@ -80,6 +81,7 @@ class Add_Folders:
         return True
 
     def parth_folders(self) -> list[LLMFunctionCall] | None:
+        """check the errors and convert the parameters to those desired"""
         parser = parth_llm_ouput(self.data_input)
         result: list[LLMFunctionCall] | None = parser.put_in_dict()
 
@@ -124,6 +126,7 @@ class Add_Folders:
         return result
 
     def generate(self) -> None:
+        """generate the file or rewrite it to the file the result in json"""
         parsed = self.parth_folders()
 
         if parsed is None:

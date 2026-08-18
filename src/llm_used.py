@@ -112,7 +112,7 @@ class LlmUsed:
         return function_complete, True
 
     def use_prompt(self, promptquest: str | Any) -> Any | str:
-
+        """use the prompt and enter a loop until the end of what is useful"""
         built_prompt = self.build_prompt(promptquest)
         print(chose_color("Hey, I just met you, and this is crazy", 11))
 
@@ -177,6 +177,7 @@ class LlmUsed:
         return text[: text.rfind("}") + 1]
 
     def launch(self) -> str:
+        """launches the prompt based on the input"""
         if self.prompt:
             return self.use_prompt(self.prompt)
 

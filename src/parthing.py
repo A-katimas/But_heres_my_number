@@ -54,6 +54,7 @@ class Parseurjson:
         )
 
     def readjson(self, folders: str) -> Any:
+        """allows you to read a json"""
         try:
             with open(folders, "r", encoding="utf-8") as f:
                 return json.load(f)
@@ -82,10 +83,12 @@ class Parseurjson:
             sys.exit(1)
 
     def print_function_call(self) -> None:
+        """print all call function in json"""
         for i, prompt in enumerate(self.function_call.root):
             print(f"Prompt {i}: {prompt.prompt}")
 
     def print_function_define(self) -> None:
+        """print all define function in json"""
         for i, function in enumerate(self.function_define.root):
             print(
                 f"Function {i}: {function.name} - {function.description} "
@@ -111,6 +114,7 @@ class parth_llm_ouput:
         return "[\n" + self.llm_raw_output[start:end + 1] + "\n]"
 
     def put_in_dict(self) -> list[LLMFunctionCall] | None:
+        """put all data in the input json to a dict to use them easly"""
         try:
             raw_json = self.extract_json()
         except ValueError as e:
