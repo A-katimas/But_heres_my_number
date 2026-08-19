@@ -10,7 +10,7 @@ from src.use_terminal.color import color
 
 
 class ParamSpec(BaseModel):
-    type: Literal["integer", "string", "number", "bool"]
+    type: Literal["integer", "string", "number", "boolean"]
 
 
 class LLMFunctionCall(BaseModel):
