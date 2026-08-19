@@ -2,6 +2,7 @@ import json
 from parthing import parth_llm_ouput, define_function, LLMFunctionCall
 from src.use_terminal.color import color
 from typing import Any
+from pathlib import Path
 
 
 class MyEncoder(json.JSONEncoder):
@@ -139,7 +140,8 @@ class Add_Folders:
                 )
             )
             return
-
+        dirpath = Path(self.name_output).parent
+        dirpath.mkdir(parents=True, exist_ok=True)
         print(f"\n\n{parsed}\n\n", flush=True)
         with open(self.name_output, "w+", encoding="utf-8") as file:
             json.dump(
